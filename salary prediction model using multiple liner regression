@@ -1,0 +1,32 @@
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('Salary.csv')
+features = df.iloc[:,0:-1].values
+labels = df.iloc[:,-1].values
+
+from sklearn.cross_validation import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(features,labels,test_size=0.3,random_state=0)
+
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train,y_train)
+
+y_pred = regressor.predict(X_test)
+
+regressor.coef_
+regressor.intercept_
+
+TrainScore=regressor.score(X_train,y_train)
+TestScore=regressor.score(X_test,y_test)
+
+i=float(input('enter the experience: '))
+j=int(input('enter the age: '))
+k=int(input('enter the skill rank: '))
+y_output = regressor.intercept_ + regressor.coef_[0]*i + regressor.coef_[1]*j+regressor.coef_[2]*k
+
+print('predicted salary:',y_output)
+
+from sklearn import metrics
+MSE = metrics.mean_squared_error(y_test,y_pred)
+RMSE=np.sqrt(metrics.mean_squared_error(y_test,y_pred))
